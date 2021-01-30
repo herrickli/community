@@ -1,8 +1,10 @@
 package com.cheng.community;
 
 import com.cheng.community.dao.DiscussPostMapper;
+import com.cheng.community.dao.LoginTicketMapper;
 import com.cheng.community.dao.UserMapper;
 import com.cheng.community.entity.DiscussPost;
+import com.cheng.community.entity.LoginTicket;
 import com.cheng.community.entity.User;
 import org.apache.catalina.LifecycleState;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,9 @@ public class MapperTest {
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Test
     public void testSelectUser(){
@@ -65,5 +70,25 @@ public class MapperTest {
 
         int rows = discussPostMapper.selectDiscussPostRows(149);
         System.out.println(rows);
+    }
+
+    @Test
+    public void testInsertLoginTicket(){
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setTicket("abc");
+        loginTicket.setUserId(101);
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLoginTicket() {
+        LoginTicket loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
+
+        loginTicketMapper.updateStatus("abc", 1);
+        loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
     }
 }
